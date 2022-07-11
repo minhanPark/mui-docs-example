@@ -204,3 +204,54 @@ InputProps을 통해서 input 창에 넣어야하는 속성들을 넣을수도 �
 ```
 
 기본적으로 리액트에서 input 창을 다루는 방식 그대로 사용하는데 react hook form 을 사용하는 방법은 더 찾아봐야할 것 같다.
+
+## Select
+
+select 태그 형태를 구현하려면 TextField, MenuItem이 필요하다.
+
+```jsx
+<TextField
+  label="Select country"
+  select
+  value={country}
+  onChange={handleChanage}
+  fullWidth
+  SelectProps={{
+    multiple: true,
+  }}
+>
+  <MenuItem value="IN">India</MenuItem>
+  <MenuItem value="US">USA</MenuItem>
+  <MenuItem value="AU">Austraila</MenuItem>
+</TextField>
+```
+
+SelectProps에 multiple값을 true로 하면 다중 선택이 가능해진다. 그래서 onChange에 값으로 배열을 받게된다. 해당 속성을 제거하면 선택된 값의 value를 받게된다.
+
+## Radio
+
+```jsx
+<FormControl>
+  <FormLabel id="job-exp-group-label">Year of exp</FormLabel>
+  <RadioGroup
+    name="job-exp-group"
+    aria-labelledby="job-exp-group-label"
+    value={value}
+    onChange={handleChange}
+    row
+  >
+    <FormControlLabel
+      control={<Radio size="medium" color="secondary" />}
+      label="0-2"
+      value="0-2"
+    />
+    <FormControlLabel control={<Radio />} label="3-5" value="3-5" />
+    <FormControlLabel control={<Radio />} label="6-10" value="6-10" />
+  </RadioGroup>
+  <FormHelperText>Someting :</FormHelperText>
+</FormControl>
+```
+
+radio 태그는 위와 같은 형태로 쓴다.  
+RadioGroup에 value와 onChange로 값을 컨트롤 할 수 있고, row 속성을 통해 가로 배치할 수 있다.  
+FormControlLabel에 라디오 태그를 주고, 라벨과 value 값을 주면 된다.
