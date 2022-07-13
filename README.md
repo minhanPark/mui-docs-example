@@ -626,3 +626,154 @@ Menu는 Menu 컴포넌트와 MenuItem 컴포넌트로 만드는데, 만들려는
 ```
 
 color, underline, variant 등을 줘서 꾸밀 수 있음
+
+## Breadcrumbs
+
+Breadcrumbs가 빵 부스러기들을 뜻한다고 한다.  
+사용자의 두번째 네비게이션인 것이다.
+
+```jsx
+<Breadcrumbs
+  aria-label="breadcrumb"
+  separator={<NavigateNext fontSize="small" />}
+  maxItems={3}
+>
+  <Link underline="hover" href="#">
+    Home
+  </Link>
+  <Link underline="hover" href="#">
+    Catalogs
+  </Link>
+  <Link underline="hover" href="#">
+    Accessoried
+  </Link>
+  <Typography color="text.primary">Shoes</Typography>
+</Breadcrumbs>
+```
+
+separator 속성으로 구분자를 무엇으로 할 지 정할 수 있다.(아이콘도 되고, 문자도 됨)  
+그 안에 링크들을 나열해주면 알아서 형태를 맞춰서 만들어준다.
+
+## Drawer
+
+서랍 형태의 컴포넌트.
+사이드 네비게이션으로 사용할 형태이다.
+
+```jsx
+<>
+  <IconButton
+    size="large"
+    edge="start"
+    color="inherit"
+    aria-label="logo"
+    onClick={() => setIsOpen(true)}
+  >
+    <MenuIcon />
+  </IconButton>
+  <Drawer anchor="left" open={isOpen} onClose={() => setIsOpen(false)}>
+    <Box p={2} width="250px" textAlign="center" role="presentation">
+      <Typography variant="h6" component="div">
+        Side Panel
+      </Typography>
+    </Box>
+  </Drawer>
+</>
+```
+
+anchor 속성으로 위치를 조절하고, open으로 열고 닫는다. 기본적으로 z-index는 제일 높은듯 하다.
+
+## SpeedDial
+
+SpeedDial 컴포넌트는 우측 하단에 특정 행동을 바로 할 수 있도록 해주는 컴포넌트를 만들어준다.
+
+```jsx
+import { SpeedDial, SpeedDialAction, SpeedDialIcon } from "@mui/material";
+
+export const MuiSpeedDial = () => {
+  return (
+    <SpeedDial
+      ariaLabel="Navigation speed dial"
+      sx={{ position: "absolute", bottom: 16, right: 16 }}
+      icon={<SpeedDialIcon openIcon={<EditIcon />} />}
+    >
+      <SpeedDialAction icon={<CopyIcon />} tooltipTitle="Copy" />
+      <SpeedDialAction icon={<PrintIcon />} tooltipTitle="Print" />
+      <SpeedDialAction icon={<ShareIcon />} tooltipTitle="Share" />
+    </SpeedDial>
+  );
+};
+```
+
+특이한 건 SpeedDialIcon은 material에서 갖고온다는 점이고, 나머지는 다 똑같다.  
+SpeedDial 밑에 SpeedDialAction을 하면 알아서 잡아준다.
+
+## BottonNavigation
+
+모바일 앱의 bottom navigation 형태임.
+
+```tsx
+<BottomNavigation
+  sx={{ width: "100%", position: "absolute", bottom: 0 }}
+  value={value}
+  onChange={(event, newValue) => {
+    setValue(newValue);
+  }}
+>
+  <BottomNavigationAction label="Home" icon={<HomeIcon />} />
+  <BottomNavigationAction label="Favorites" icon={<Favorite />} />
+  <BottomNavigationAction label="Profile" icon={<PersonIcon />} />
+</BottomNavigation>
+```
+
+깔끔하게 완성되니까 좋다. 리액트 라우터랑 결합하는 것만 찾아보면 모바일 화면 만들 땐 mui 쓰는게 더 좋을 수도 있을 것 같다는 생각이 든다.
+
+## Avatar
+
+아바타는 프로필에서 이미지 그 형태 그대로다.
+
+```jsx
+<Avatar sx={{ bgcolor: "primary.light" }}>BW</Avatar>
+```
+
+이런식으로 주면 그냥 BW를 색으로 감싼 동그란 형태가 된다.
+
+```jsx
+<Avatar src="https://randomuser.me/api/portraits/women/79.jpg" alt="Jane Doe" />
+```
+
+위 형태는 이미지를 동그랗게 보여준다.
+
+```jsx
+<AvatarGroup max={3}>
+  <Avatar sx={{ bgcolor: "primary.light" }}>BW</Avatar>
+  <Avatar sx={{ bgcolor: "success.light" }}>CK</Avatar>
+  <Avatar
+    src="https://randomuser.me/api/portraits/women/79.jpg"
+    alt="Jane Doe"
+  />
+  <Avatar src="https://randomuser.me/api/portraits/men/51.jpg" alt="Jone Doe" />
+</AvatarGroup>
+```
+
+만약 아바타 그룹으로 묶어준다면 아바타 들을 나열할 때 더 깔끔하게 표시할 수 있다.  
+그리고 AvatarGroup의 max속성을 통해서 최대표시 아바타도 나타낼 수 있다.
+
+## Badge
+
+Badge 컴포넌트는 우측 상단에 숫자와 함께 나타는 그 아이콘이다.
+
+```jsx
+<Stack spacing={2} direction="row">
+  <Badge badgeContent={5} color="primary">
+    <MailIcon />
+  </Badge>
+  <Badge badgeContent={0} color="secondary" showZero>
+    <MailIcon />
+  </Badge>
+  <Badge badgeContent={100} color="primary" max={999}>
+    <MailIcon />
+  </Badge>
+</Stack>
+```
+
+badgeContent 속성에 주는 숫자가 표시되는 숫자고 기본적으로 0은 숨겨지고(showZero가 없으면), 최대가 99이다. 그래서 max를 999로 바꾸었다.
