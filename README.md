@@ -777,3 +777,454 @@ Badge 컴포넌트는 우측 상단에 숫자와 함께 나타는 그 아이콘�
 ```
 
 badgeContent 속성에 주는 숫자가 표시되는 숫자고 기본적으로 0은 숨겨지고(showZero가 없으면), 최대가 99이다. 그래서 max를 999로 바꾸었다.
+
+## List
+
+Drawer과 함께 써서 side navigation을 만들 때 사용할 컴포넌트다.  
+List 컴포넌트는 ul, ListItem은 li 태그이다. 리액트 라우터와 합치는 건 어디에 해야할 지, 또 해당 페이지로 들어갔을 때 하이라이트를 주는 방법도 알아봐야 할 것이다.
+
+```jsx
+<List>
+  <ListItem disablePadding>
+    <ListItemButton>
+      <ListItemIcon>
+        <ListItemAvatar>
+          <Avatar>
+            <MailIcon />
+          </Avatar>
+        </ListItemAvatar>
+      </ListItemIcon>
+      <ListItemText primary="List item 1" secondary="secondary text" />
+    </ListItemButton>
+  </ListItem>
+  <Divider />
+  <ListItem>
+    <ListItemIcon>
+      <MailIcon />
+    </ListItemIcon>
+    <ListItemText primary="List item 1" secondary="secondary text" />
+  </ListItem>
+  <Divider />
+</List>
+```
+
+리스트에는 관련된 컴포넌트가 많다. Divider로 나누는 것 뿐만 아니라 sub title 도 사용해야 한다.
+
+## Chip
+
+Chip 컴포넌트는 태그 형태의 컴포넌트다.
+
+```jsx
+<Chip
+  label="Delete"
+  color="error"
+  icon={<FaceIcon />}
+  onClick={() => alert("Clicked")}
+  onDelete={() => alert("Delete handler called")}
+/>
+```
+
+특이한 건 onClick과 onDelete 속성이다. onClick을 넣으면 hover가 생기면서 클릭했을 때 특정 이벤트가 일어나도록 할 수 있고, onDelete를 추가하면 x 아이콘이 생기면서 지우거나 아니면 눌렀을 때 특정 이벤트가 일어나도록 할 수 있다.
+
+## Tooltip
+
+마우스를 갖다되었을 때 창이 뜨는 컴포넌트다.
+
+```jsx
+<Tooltip
+  title="Delete"
+  placement="right-end"
+  arrow
+  enterDelay={500}
+  leaveDelay={200}
+>
+  <IconButton>
+    <DeleteIcon />
+  </IconButton>
+</Tooltip>
+```
+
+title 속성이 뜨는 말이고, arrow 속성은 ui 화살표 형태가 된다.  
+enterDelay와 leaveDelay는 마우스를 갖다 댈 때 지연시간을 주는 속성이다.
+
+## Table
+
+테이블 컴포넌트다.
+
+```jsx
+<TableContainer component={Paper} sx={{ maxHeight: "300px" }}>
+  <Table aria-label="simple table" stickyHeader>
+    <TableHead>
+      <TableRow>
+        <TableCell>Id</TableCell>
+        <TableCell>First name</TableCell>
+        <TableCell>Last name</TableCell>
+        <TableCell align="center">Email</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {tableData.map((row) => (
+        <TableRow
+          key={row.id}
+          sx={{
+            "&:last-child td, &:last-child th": { border: 0 },
+          }}
+        >
+          <TableCell>{row.id}</TableCell>
+          <TableCell>{row.first_name}</TableCell>
+          <TableCell>{row.last_name}</TableCell>
+          <TableCell align="center">{row.email}</TableCell>
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer>
+```
+
+컴포넌트 속성에 **component={Paper} 이것처럼 mui의 컴포넌트를 전달**할 수 도 있다.
+나머지는 비슷한 형태로 간다.  
+이것 대신에 react table 을 많이 쓰는 것 같다.
+
+## Alert
+
+경고창 띄우는 컴포넌트.
+
+```jsx
+<Alert variant="outlined" severity="error">
+  This is an error alert
+</Alert>
+```
+
+severity에는 error | warning | info | success가 들어갈 수 있다. 해당 값에 따라서 기본적인 색상이 결정됨. variant로 기본적인 디자인 결정됨.
+
+```jsx
+<>
+  <Alert
+    severity="success"
+    action={
+      <Button color="inherit" size="small">
+        UNDO
+      </Button>
+    }
+  >
+    <AlertTitle>success</AlertTitle>
+    This is an success alert
+  </Alert>
+  <Alert
+    severity="success"
+    icon={<CheckIcon fontSize="inherit" />}
+    onClose={() => alert("Close alert")}
+  >
+    <AlertTitle>success</AlertTitle>
+    This is an success alert
+  </Alert>
+</>
+```
+
+action에 버튼 등을 줘서 특정 행동을 할 수 있고, onClose 속성을 주면 닫는 x 버튼이 생긴다.  
+AlertTitle 속성을 통해서 알림창의 헤더를 설정할 수 있다.
+
+## Snackbar
+
+어떤 상태에 대한 진행사항을 알려줄 때 snackbar 컴포넌트를 쓸 수 있다.  
+alert와 함께 쓰면 더 좋다.
+
+```tsx
+const SnackbarAlert: any = forwardRef<HTMLDivElement, AlertProps>(
+  function SnackbarAlert(props, ref) {
+    return <Alert elevation={6} ref={ref} {...props} />;
+  }
+);
+
+<Snackbar
+  autoHideDuration={4000}
+  open={customOpen}
+  onClose={handleCustomClose}
+  anchorOrigin={{
+    vertical: "top",
+    horizontal: "center",
+  }}
+>
+  <SnackbarAlert onClose={handleCustomClose} severity="success">
+    form submitted successfully
+  </SnackbarAlert>
+</Snackbar>;
+```
+
+forwardRef를 사용하는데 docs에서는 그냥 사용했던 것 같음.
+
+snackbar 안에 Alert를 넣어주면 된다.
+
+## Dialog
+
+다이얼로그 컴포넌트는 화면의 맨 위에(컨텐츠 앞에) 컨텐츠를 띄우는 컴포넌트다.  
+프로젝트에서는 여기서 폼을 넣고, 수정 및 읽기, 생성 등을 해야한다.
+
+```jsx
+<>
+  <Button onClick={() => setOpen(true)}>Open dialog</Button>
+  <Dialog
+    aria-labelledby="dialog-title"
+    aria-describedby="dialog-description"
+    open={open}
+    // onClose={() => setOpen(false)}
+  >
+    <DialogTitle id="dialog-title">Submit the test ?</DialogTitle>
+    <DialogContent>
+      <DialogContentText id="dialog-description">
+        Are you sure you want to submit the test ? you will not be able to edit
+        after submitting
+      </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={() => setOpen(false)}>Cancel</Button>
+      <Button onClick={() => setOpen(false)} autoFocus>
+        Submit
+      </Button>
+    </DialogActions>
+  </Dialog>
+</>
+```
+
+기본적으로 버튼이나 특정 행동을 해서 띄울 것이기 때문에 open 속성이 기본적으로 들어가야 한다.  
+DialogTitle, DialogContent,DialogActions 등으로 나누어서 컴포넌트를 작성하면 된다.  
+form 형식은 DialogContent에 들어가면 될듯하다.
+Dialog에 onClose 속성을 넣어주면 다이얼로그 밖을 클릭해도 꺼지는데, 꺼지지 않게 하려면 값을 넣지 않으면 된다.
+
+## Progress
+
+로딩바.
+
+```jsx
+<>
+  <CircularProgress color="success" />
+  <CircularProgress variant="determinate" color="success" value={60} />
+
+  <LinearProgress color="success" />
+  <LinearProgress variant="determinate" color="success" value={60} />
+</>
+```
+
+CircularProgress은 원형, LinearProgress은 한 줄로 된 로딩바이다.
+variant 값으로 determinate를 주면 멈춘 상태를 표현가능 하고, 아니면 계속 돌아감
+
+## Skeleton
+
+미리 컴포넌트 형태를 그려서 보여주면 사용자 경험에 더 좋다. 스켈레톤은 컴포넌트 형태를 회색으로 해서 미리 보여주는데 의미가 있다.  
+중요한건 모든게 다 스켈레톤이 되면 좋은게 아니고, 처음부터 보여줄 데이터가 있을 때 스켈레톤을 사용하면 더 빨라보인다.
+
+```jsx
+<>
+  <Skeleton variant="text" />
+  <Skeleton variant="circular" width={40} height={40} />
+  <Skeleton variant="rectangular" width={250} height={125} />
+</>
+```
+
+variant를 통해서 형태를 만들면 된다.
+
+```jsx
+<Box sx={{ width: "250px" }}>
+  {loading ? (
+    <Skeleton variant="rectangular" width={256} height={144} animation="wave" />
+  ) : (
+    <img
+      src="https://source.unsplash.com/random/256x144"
+      alt="skeleton"
+      width={256}
+      height={144}
+    />
+  )}
+  <Stack direction="row" spacing={1} sx={{ width: "100%", marginTop: "12px" }}>
+    {loading ? (
+      <Skeleton variant="circular" width={40} height={40} animation="wave" />
+    ) : (
+      <Avatar>RW</Avatar>
+    )}
+    <Stack sx={{ width: "80%" }}>
+      {loading ? (
+        <>
+          <Typography variant="body1">
+            <Skeleton variant="text" width="100%" animation="wave" />
+          </Typography>
+          <Typography variant="body2">
+            <Skeleton variant="text" width="100%" animation="wave" />
+          </Typography>
+        </>
+      ) : (
+        <>
+          <Typography variant="body1">React MUI Totorials</Typography>
+          <Typography variant="body2">Good for you :)</Typography>
+        </>
+      )}
+    </Stack>
+  </Stack>
+</Box>
+```
+
+loading 상태에 따라서 스켈레톤을 그려서 보여주면 된다.
+Typography 컴포넌트 안에 Skeleton을 정의해주면 variant에 따라 다르게 표현됨
+
+## LoadingButton
+
+로그인이나 데이터를 받아올 때 사용할 버튼.  
+로딩 상태에 따라서 로딩 ux를 보여줌
+
+```bash
+npm install @mui/lab
+```
+
+기본적인 컴포넌트 말고도 lab에 들어있는 것들을 사용하려면 lab을 설치해야한다.  
+로딩버튼도 lab에 있음
+
+```jsx
+<LoadingButton variant="outlined" loadingIndicator="Loading..." loading>
+  Fetch data
+</LoadingButton>
+```
+
+loadingIndicator으로 로딩 시 멘트를 바꿀 수 있다. loading의 값에 따라서 로딩이냐 아니냐 구분한다.
+
+```jsx
+<LoadingButton
+  variant="outlined"
+  loadingPosition="start"
+  startIcon={<SaveIcon />}
+  loading
+>
+  Save
+</LoadingButton>
+```
+
+아이콘을 사용하면 아이콘만 돌아가기 때문에 더 예쁨.
+
+## Date and Time Picker
+
+해당 컴포넌트를 사용하려면 추가적으로 다운로드 받아야 할 것들이 있다.
+
+```bash
+npm i date-fns @date-io/date-fns @mui/x-date-pickers
+```
+
+컴포넌트는 @mui/x-date-pickers에, 기능은 date-fns에, @date-io/date-fns에는 어댑터가 들어있는 것같다.
+
+또한 locale을 바꾸기 위해서는 LocalizationProvider를 활용해야함.
+
+```jsx
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+
+<LocalizationProvider dateAdapter={AdapterDateFns}></LocalizationProvider>;
+```
+
+위와 같은 형태로 감싼 다음 사용해야한다.
+
+```jsx
+<>
+  <DatePicker
+    label="Date Picker"
+    renderInput={(params: any) => <TextField {...params} />}
+    value={selectedDate}
+    onChange={(newValue: any) => {
+      setSelectedDate(newValue);
+    }}
+  />
+  <TimePicker
+    label="Time Picker"
+    renderInput={(params: any) => <TextField {...params} />}
+    value={selectedTime}
+    onChange={(newValue: any) => {
+      setSelectedTime(newValue);
+    }}
+  />
+  <DateTimePicker
+    label="Date Time Picker"
+    renderInput={(params: any) => <TextField {...params} />}
+    value={selectedDateTime}
+    onChange={(newValue: any) => {
+      setSelectedDateTime(newValue);
+    }}
+  />
+</>
+```
+
+그러면 제대로 렌더링 되는 것을 확인 가능
+
+## Tab
+
+탭 컴포넌트는 TabContext로 TabList와 TabPanel을 감싸주면 된다.
+
+```tsx
+const [value, setValue] = useState("1");
+const handleChange = (e: React.SyntheticEvent, newValue: string) => {
+  setValue(newValue);
+};
+
+<TabContext value={value}>
+  <Box sx={{ borderBottom: 1, borderColor: "divider", width: "300px" }}>
+    <TabList
+      aria-label="Tabs example"
+      onChange={handleChange}
+      textColor="secondary"
+      indicatorColor="secondary"
+      variant="scrollable"
+      scrollButtons="auto"
+    >
+      <Tab label="Tab one" value="1" icon={<FavoriteIcon />} />
+      <Tab
+        label="Tab Two"
+        value="2"
+        icon={<FavoriteIcon />}
+        iconPosition="start"
+      />
+      <Tab
+        label="Tab Three"
+        value="3"
+        icon={<FavoriteIcon />}
+        iconPosition="end"
+      />
+    </TabList>
+  </Box>
+  <TabPanel value="1">Panel One</TabPanel>
+  <TabPanel value="2">Panel Two</TabPanel>
+  <TabPanel value="3">Panel Three</TabPanel>
+</TabContext>;
+```
+
+variant를 scrollable로 바꾸고, 길이를 고정시켜주면 스크롤 형태로 바뀜
+
+## Timeline
+
+타임라인(시간 흐름 등 순서에 따라 나열되는 것)을 나타낼 때 씀
+
+## 반응형
+
+```jsx
+<Box
+  sx={{
+    width: {
+      xs: 100, // 0
+      sm: 200, // 600
+      md: 300, // 900
+      lg: 400, // 1200
+      xl: 500, //1536
+    },
+    height: "300px",
+    bgcolor: "primary.light",
+  }}
+>
+  Box
+</Box>
+```
+
+Box 컴포넌트 같은 경우엔 값에 객체를 줘서 반응형을 만들 수 있다.
+
+```jsx
+<Stack
+  direction={{ xs: "column", sm: "row" }}
+  spacing={{ xs: 1, sm: 2, md: 4 }}
+></Stack>
+```
+
+스택도 값에 객체를 줘서 상황에 따라서 다르게 보여줄 수 있다.  
+Grid는 속성으로 반응형을 구현한다.
