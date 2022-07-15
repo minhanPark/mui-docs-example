@@ -1228,3 +1228,41 @@ Box 컴포넌트 같은 경우엔 값에 객체를 줘서 반응형을 만들 �
 
 스택도 값에 객체를 줘서 상황에 따라서 다르게 보여줄 수 있다.  
 Grid는 속성으로 반응형을 구현한다.
+
+## react-hook-form 합치기
+
+우선 register를 그대로 전달하니 생각대로 작동하였음.
+
+```jsx
+<form onSubmit={handleSubmit(onSubmit)}>
+  <Grid container spacing={2} sx={{ margin: 0 }}>
+    <Grid item xs={12}>
+      <TextField label="email" fullWidth {...register("email")} />
+    </Grid>
+    <Grid item xs={12}>
+      <TextField
+        label="password"
+        type={showPassword ? "text" : "password"}
+        fullWidth
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton onClick={handleShowPassword}>
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+        {...register("password")}
+      />
+    </Grid>
+  </Grid>
+  <FormControlLabel control={<Checkbox />} label="아이디를 저장하시겠습니까?" />
+  <Button variant="contained" type="submit">
+    Submit
+  </Button>
+</form>
+```
+
+레이아웃만 잘 잡으면 제대로 작동함.
+몇개는 더 확인해봐야겠지만 일단 로그인 페이지 정도는 만들 수 있을듯.
